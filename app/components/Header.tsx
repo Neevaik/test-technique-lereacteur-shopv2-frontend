@@ -10,11 +10,7 @@ interface User {
   role?: "admin" | "user";
 }
 
-interface HeaderProps {
-  cartTotal: number;
-}
-
-export default function Header({ cartTotal }: HeaderProps) {
+export default function Header() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -46,7 +42,7 @@ export default function Header({ cartTotal }: HeaderProps) {
 
   return (
     <header className="bg-gray-50 shadow-md p-4 flex justify-between items-center">
-      <Link href="/" className="text-2xl font-bold text-gray-900">
+      <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition">
         ShopV2
       </Link>
 
@@ -56,11 +52,13 @@ export default function Header({ cartTotal }: HeaderProps) {
           className="relative bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
         >
           Panier
-          {cartTotal > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              {cartTotal}
-            </span>
-          )}
+        </Link>
+
+        <Link
+          href="/products"
+          className="relative bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+        >
+          Produits
         </Link>
 
         {user?.role === "admin" && (
