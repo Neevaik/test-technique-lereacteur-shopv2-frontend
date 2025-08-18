@@ -27,7 +27,12 @@ export default function SignupPage() {
   const [state, formAction] = useActionState(signupAction, null);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
+      {/* Header cliquable pour revenir à l'accueil */}
+      <Link href="/" className="text-3xl font-bold text-gray-800 mb-8 hover:text-blue-600 transition">
+        ShopV2
+      </Link>
+
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
         <h1 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
           Créer un compte ✨

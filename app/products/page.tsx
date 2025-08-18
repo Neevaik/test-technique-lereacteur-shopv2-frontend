@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Header from "../Header";
+
 
 interface Product {
   _id: string;
@@ -50,6 +52,8 @@ export default function ProductsPage() {
   }
 
   return (
+    <>
+    <Header cartTotal={0}/>
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 p-6">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-extrabold text-gray-800 mb-8 text-center">
@@ -93,5 +97,6 @@ export default function ProductsPage() {
         )}
       </div>
     </div>
+    </>
   );
 }
