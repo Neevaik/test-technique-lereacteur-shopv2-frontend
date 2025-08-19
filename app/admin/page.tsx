@@ -1,59 +1,79 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Header from "../components/Header";
+
+type Order = {
+  _id: string;
+  userEmail: string;
+  delivered: boolean;
+};
 
 export default function AdminPage() {
-  const [orders, setOrders] = useState<any[]>([]);
-  const router = useRouter();
+  const [orders, setOrders] = useState<Order[]>([
+    { _id: "1", userEmail: "john@example.com", delivered: false },
+    { _id: "2", userEmail: "sarah@example.com", delivered: false },
+    { _id: "3", userEmail: "mike@example.com", delivered: true },
+  ]);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const res = await axios.get("http://localhost:4000/admin/orders", {
-          withCredentials: true
-        });
-        setOrders(res.data);
-      } catch (err) {
-        console.error(err);
-        router.push("/"); 
-      }
-    };
-    fetchOrders();
-  }, []);
-
-  const validateOrder = async (orderId: string) => {
-    try {
-      await axios.post(`http://localhost:4000/admin/orders/${orderId}/deliver`);
-      setOrders((prev) =>
-        prev.map((o) => (o._id === orderId ? { ...o, delivered: true } : o))
-      );
-    } catch (err) {
-      console.error(err);
-    }
+  const validateOrder = (orderId: string) => {
+    setOrders((prev) =>
+      prev.map((o) =>
+        o._id === orderId ? { ...o, delivered: true } : o
+      )
+    );
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Admin - Commandes</h1>
-      {orders.map((order) => (
-        <div key={order._id} className="border p-4 mb-4 rounded flex justify-between items-center">
-          <div>
-            <p><strong>Commande :</strong> {order._id}</p>
-            <p><strong>Utilisateur :</strong> {order.userEmail}</p>
-            <p><strong>Status :</strong> {order.delivered ? "Livrée ✅" : "En attente ❌"}</p>
-          </div>
-          {!order.delivered && (
-            <button
-              onClick={() => validateOrder(order._id)}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            >
-              Valider la livraison
-            </button>
+    <>
+      <Header />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
+        <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-3xl">
+          <h1 className="text-3xl font-extrabold text-gray-800 text-center mb-8">
+            Tableau de bord Admin 📦
+          </h1>
+
+          {orders.length === 0 ? (
+            <p className="text-center text-gray-600">
+              Aucune commande pour le moment.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {orders.map((order) => (
+                <div
+                  key={order._id}
+                  className="border border-gray-200 rounded-xl p-5 shadow-md flex justify-between items-center hover:shadow-lg transition"
+                >
+                  <div>
+                    <p className="text-gray-800 font-semibold">
+                      Commande #{order._id}
+                    </p>
+                    <p className="text-gray-600">Utilisateur : {order.userEmail}</p>
+                    <p className="text-gray-600">
+                      Statut :{" "}
+                      <span
+                        className={`font-bold ${order.delivered ? "text-green-600" : "text-red-600"
+                          }`}
+                      >
+                        {order.delivered ? "Livrée ✅" : "En attente ❌"}
+                      </span>
+                    </p>
+                  </div>
+
+                  {!order.delivered && (
+                    <button
+                      onClick={() => validateOrder(order._id)}
+                      className="bg-green-600 text-white px-5 py-2 rounded-xl shadow hover:bg-green-700 transition"
+                    >
+                      Valider
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           )}
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 }

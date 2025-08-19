@@ -9,7 +9,7 @@ async function loginAction(prevState: string | null, formData: FormData) {
   const password = formData.get("password");
 
   try {
-    const res = await axios.post("http://localhost:4000/users/login", {
+    const res = await axios.post("http://localhost:4000/user/login", {
       email,
       password,
     });

@@ -10,7 +10,7 @@ async function signupAction(prevState: string | null, formData: FormData) {
   const password = formData.get("password");
 
   try {
-    const res = await axios.post("http://localhost:4000/users/signup", {
+    const res = await axios.post("http://localhost:4000/user/signup", {
       username,
       email,
       password,
@@ -28,7 +28,6 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
-      {/* Header cliquable pour revenir à l'accueil */}
       <Link href="/" className="text-3xl font-bold text-gray-800 mb-8 hover:text-blue-600 transition">
         ShopV2
       </Link>
