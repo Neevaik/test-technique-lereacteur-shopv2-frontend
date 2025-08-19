@@ -5,7 +5,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 
-
 interface Product {
     _id: string;
     title: string;
@@ -18,6 +17,7 @@ export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
 
     useEffect(() => {
@@ -52,10 +52,13 @@ export default function ProductsPage() {
         );
     }
 
-    const handlClick = (id: string) => {
-        console.log("Produit sélectionné :", id);
+    const handleClick = (id: string) => {
         router.push(`/products/${id}`);
-    }
+    };
+
+    const filteredProducts = products.filter((product) =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <>
@@ -66,16 +69,27 @@ export default function ProductsPage() {
                         Nos Produits
                     </h1>
 
-                    {products.length === 0 ? (
+                    <div className="mb-6 flex justify-center">
+                        <input
+                            type="text"
+                            placeholder="Rechercher un produit..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full max-w-md p-3 rounded-xl border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    {filteredProducts.length === 0 ? (
                         <p className="text-center text-gray-600 text-xl">
-                            Aucun produit disponible pour le moment 😔
+                            Aucun produit trouvé 😔
                         </p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                            {products.map((product) => (
+                            {filteredProducts.map((product) => (
                                 <div
                                     key={product._id}
-                                    className="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
+                                    className="bg-white rounded-2xl shadow p-4 flex flex-col items-center"
+                                >
                                     <img
                                         src={product.thumbnail}
                                         alt={product.title}
@@ -91,7 +105,9 @@ export default function ProductsPage() {
                                         {product.price.toFixed(2)} €
                                     </p>
                                     <button
-                                        onClick={() => handlClick(product._id)}>
+                                        onClick={() => handleClick(product._id)}
+                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+                                    >
                                         Voir le produit
                                     </button>
                                 </div>

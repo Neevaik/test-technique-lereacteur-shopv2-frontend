@@ -1,8 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 async function signupAction(prevState: string | null, formData: FormData) {
   const username = formData.get("username");
@@ -16,7 +18,7 @@ async function signupAction(prevState: string | null, formData: FormData) {
       password,
     });
     if (res.status !== 201) throw new Error("Erreur lors de l'inscription");
-    return "Inscription réussie ✅";
+    return "✅ Inscription réussie";
   } catch (error: any) {
     console.error("Error signing up:", error);
     return error.response?.data?.message || "Erreur lors de l'inscription ❌";
@@ -25,6 +27,13 @@ async function signupAction(prevState: string | null, formData: FormData) {
 
 export default function SignupPage() {
   const [state, formAction] = useActionState(signupAction, null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state && state.includes("✅")) {
+      router.push("/products");
+    }
+  }, [state, router]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
@@ -69,9 +78,8 @@ export default function SignupPage() {
 
         {state && (
           <p
-            className={`mt-4 text-center font-medium ${
-              state.includes("✅") ? "text-green-600" : "text-red-600"
-            }`}
+            className={`mt-4 text-center font-medium ${state.includes("✅") ? "text-green-600" : "text-red-600"
+              }`}
           >
             {state}
           </p>

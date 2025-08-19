@@ -1,8 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 async function loginAction(prevState: string | null, formData: FormData) {
   const email = formData.get("email");
@@ -13,19 +14,33 @@ async function loginAction(prevState: string | null, formData: FormData) {
       email,
       password,
     });
+
     if (res.status !== 200) throw new Error("Erreur lors de la connexion");
-    return "Connexion réussie ✅";
+
+    localStorage.setItem("token", res.data.token);
+
+    return "✅ Connexion réussie";
   } catch (err: any) {
     return err.response?.data?.message || err.message;
   }
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [state, formAction] = useActionState(loginAction, null);
+
+  useEffect(() => {
+    if (state && state.includes("✅")) {
+      router.push("/products");
+    }
+  }, [state, router]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
-      <Link href="/" className="text-3xl font-bold text-gray-800 mb-8 hover:text-blue-600 transition">
+      <Link
+        href="/"
+        className="text-3xl font-bold text-gray-800 mb-8 hover:text-blue-600 transition"
+      >
         ShopV2
       </Link>
 
@@ -59,8 +74,9 @@ export default function LoginPage() {
 
         {state && (
           <p
-            className={`mt-4 text-center font-medium ${state.includes("✅") ? "text-green-600" : "text-red-600"
-              }`}
+            className={`mt-4 text-center font-medium ${
+              state.includes("✅") ? "text-green-600" : "text-red-600"
+            }`}
           >
             {state}
           </p>
