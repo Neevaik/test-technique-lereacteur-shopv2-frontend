@@ -2,22 +2,23 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 
 
 interface Product {
     _id: string;
-    name: string;
+    title: string;
     description: string;
     price: number;
-    image: string;
+    thumbnail: string;
 }
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const router = useRouter();
 
     useEffect(() => {
         async function fetchProducts() {
@@ -51,6 +52,11 @@ export default function ProductsPage() {
         );
     }
 
+    const handlClick = (id: string) => {
+        console.log("Produit sélectionné :", id);
+        router.push(`/products/${id}`);
+    }
+
     return (
         <>
             <Header />
@@ -69,15 +75,14 @@ export default function ProductsPage() {
                             {products.map((product) => (
                                 <div
                                     key={product._id}
-                                    className="bg-white rounded-2xl shadow p-4 flex flex-col items-center"
-                                >
+                                    className="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
                                     <img
-                                        src={product.image}
-                                        alt={product.name}
+                                        src={product.thumbnail}
+                                        alt={product.title}
                                         className="w-full h-48 object-cover rounded-xl mb-4"
                                     />
                                     <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                                        {product.name}
+                                        {product.title}
                                     </h2>
                                     <p className="text-gray-600 mb-4 text-center">
                                         {product.description}
@@ -85,12 +90,10 @@ export default function ProductsPage() {
                                     <p className="text-lg font-bold text-blue-600 mb-4">
                                         {product.price.toFixed(2)} €
                                     </p>
-                                    <Link
-                                        href={`/products/${product._id}`}
-                                        className="bg-green-600 text-white px-5 py-2 rounded-xl shadow hover:bg-green-700 transition"
-                                    >
+                                    <button
+                                        onClick={() => handlClick(product._id)}>
                                         Voir le produit
-                                    </Link>
+                                    </button>
                                 </div>
                             ))}
                         </div>
