@@ -17,11 +17,11 @@ async function signupAction(prevState: string | null, formData: FormData) {
       email,
       password,
     });
-    if (res.status !== 201) throw new Error("Erreur lors de l'inscription");
+    if (res.status !== 201) throw new Error("Erreur lors de l inscription");
     return "✅ Inscription réussie";
   } catch (error: any) {
     console.error("Error signing up:", error);
-    return error.response?.data?.message || "Erreur lors de l'inscription ❌";
+    return error.response?.data?.message || "Erreur lors de l inscription ❌";
   }
 }
 
@@ -50,7 +50,7 @@ export default function SignupPage() {
           <input
             type="text"
             name="username"
-            placeholder="Nom d'utilisateur"
+            placeholder="Nom d utilisateur"
             className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
@@ -72,7 +72,7 @@ export default function SignupPage() {
             type="submit"
             className="bg-blue-600 text-white py-3 rounded-xl font-semibold shadow hover:bg-blue-700 transition"
           >
-            S'inscrire
+            S inscrire
           </button>
         </form>
 
