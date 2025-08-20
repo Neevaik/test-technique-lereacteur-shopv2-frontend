@@ -41,7 +41,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (state?.success) {
       localStorage.setItem("token", state.token);
-      localStorage.setItem("userId", state.id);
+      localStorage.setItem("id", state.id);
       router.push("/products");
     }
   }, [state, router]);
