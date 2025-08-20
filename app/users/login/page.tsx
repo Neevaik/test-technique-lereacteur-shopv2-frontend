@@ -5,7 +5,10 @@ import { useActionState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-async function loginAction(prevState: string | null, formData: FormData) {
+async function loginAction(
+  prevState: { message: string; success: boolean } | null,
+  formData: FormData
+) {
   const email = formData.get("email");
   const password = formData.get("password");
 
@@ -17,11 +20,17 @@ async function loginAction(prevState: string | null, formData: FormData) {
 
     if (res.status !== 200) throw new Error("Erreur lors de la connexion");
 
-    localStorage.setItem("token", res.data.token);
-
-    return "✅ Connexion réussie";
+    return {
+      message: "✅ Connexion réussie",
+      success: true,
+      token: res.data.token,
+      id: res.data._id,
+    };
   } catch (err: any) {
-    return err.response?.data?.message || err.message;
+    return {
+      message: err.response?.data?.message || err.message,
+      success: false,
+    };
   }
 }
 
@@ -30,7 +39,9 @@ export default function LoginPage() {
   const [state, formAction] = useActionState(loginAction, null);
 
   useEffect(() => {
-    if (state && state.includes("✅")) {
+    if (state?.success) {
+      localStorage.setItem("token", state.token);
+      localStorage.setItem("userId", state.id);
       router.push("/products");
     }
   }, [state, router]);
@@ -72,13 +83,12 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {state && (
+        {state?.message && (
           <p
-            className={`mt-4 text-center font-medium ${
-              state.includes("✅") ? "text-green-600" : "text-red-600"
-            }`}
+            className={`mt-4 text-center font-medium ${state.success ? "text-green-600" : "text-red-600"
+              }`}
           >
-            {state}
+            {state.message}
           </p>
         )}
 

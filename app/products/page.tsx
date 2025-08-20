@@ -20,6 +20,7 @@ export default function ProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const router = useRouter();
 
+
     useEffect(() => {
         async function fetchProducts() {
             try {
