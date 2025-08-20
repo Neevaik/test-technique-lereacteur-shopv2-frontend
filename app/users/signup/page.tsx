@@ -21,80 +21,84 @@ async function signupAction(prevState: string | null, formData: FormData) {
     return "✅ Inscription réussie";
   } catch (error: unknown) {
     console.error("Error signing up:", error);
-    return (error as any).response?.data?.message || "Erreur lors de l inscription ❌";
-  }
-}
 
-export default function SignupPage() {
-  const [state, formAction] = useActionState(signupAction, null);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (state && state.includes("✅")) {
-      router.push("/products");
+    if (error instanceof Error) {
+      const axiosError = error as { response?: { data?: { message?: string } } };
+      return axiosError.response?.data?.message || error.message || "Erreur lors de l'inscription ❌";
     }
-  }, [state, router]);
+    return "Erreur lors de l'inscription ❌";
+  }
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
-      <Link href="/" className="text-3xl font-bold text-gray-800 mb-8 hover:text-blue-600 transition">
-        ShopV2
-      </Link>
+  export default function SignupPage() {
+    const [state, formAction] = useActionState(signupAction, null);
+    const router = useRouter();
 
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
-        <h1 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
-          Créer un compte ✨
-        </h1>
+    useEffect(() => {
+      if (state && state.includes("✅")) {
+        router.push("/products");
+      }
+    }, [state, router]);
 
-        <form action={formAction} className="flex flex-col gap-4">
-          <input
-            type="text"
-            name="username"
-            placeholder="Nom d utilisateur"
-            className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Mot de passe"
-            className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white py-3 rounded-xl font-semibold shadow hover:bg-blue-700 transition"
-          >
-            S inscrire
-          </button>
-        </form>
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-6">
+        <Link href="/" className="text-3xl font-bold text-gray-800 mb-8 hover:text-blue-600 transition">
+          ShopV2
+        </Link>
 
-        {state && (
-          <p
-            className={`mt-4 text-center font-medium ${state.includes("✅") ? "text-green-600" : "text-red-600"
-              }`}
-          >
-            {state}
-          </p>
-        )}
+        <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+          <h1 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
+            Créer un compte ✨
+          </h1>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600">Déjà un compte ?</p>
-          <Link
-            href="/users/login"
-            className="mt-2 inline-block bg-green-600 text-white px-5 py-2 rounded-xl shadow hover:bg-green-700 transition"
-          >
-            Se connecter
-          </Link>
+          <form action={formAction} className="flex flex-col gap-4">
+            <input
+              type="text"
+              name="username"
+              placeholder="Nom d utilisateur"
+              className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Mot de passe"
+              className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <button
+              type="submit"
+              className="bg-blue-600 text-white py-3 rounded-xl font-semibold shadow hover:bg-blue-700 transition"
+            >
+              S inscrire
+            </button>
+          </form>
+
+          {state && (
+            <p
+              className={`mt-4 text-center font-medium ${state.includes("✅") ? "text-green-600" : "text-red-600"
+                }`}
+            >
+              {state}
+            </p>
+          )}
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">Déjà un compte ?</p>
+            <Link
+              href="/users/login"
+              className="mt-2 inline-block bg-green-600 text-white px-5 py-2 rounded-xl shadow hover:bg-green-700 transition"
+            >
+              Se connecter
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }

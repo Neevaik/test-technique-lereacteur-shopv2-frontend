@@ -27,8 +27,16 @@ async function loginAction(
       id: res.data._id,
     };
   } catch (err: unknown) {
+    if (err instanceof Error) {
+      const axiosErr = err as { response?: { data?: { message?: string } } };
+      return {
+        message: axiosErr.response?.data?.message || err.message,
+        success: false,
+      };
+    }
+
     return {
-      message: (err as any).response?.data?.message || (err as any).message,
+      message: "Erreur inconnue",
       success: false,
     };
   }
