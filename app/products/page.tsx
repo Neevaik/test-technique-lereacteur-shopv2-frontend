@@ -62,6 +62,7 @@ export default function ProductsPage() {
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    
     return (
         <>
             <Header />
