@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
+import Image from "next/image";
 
 interface Product {
     _id: string;
@@ -91,7 +92,7 @@ export default function ProductsPage() {
                                     key={product._id}
                                     className="bg-white rounded-2xl shadow p-4 flex flex-col items-center"
                                 >
-                                    <img
+                                    <Image
                                         src={product.thumbnail}
                                         alt={product.title}
                                         className="w-full h-48 object-cover rounded-xl mb-4"

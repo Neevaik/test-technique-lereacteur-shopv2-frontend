@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import Image from "next/image";
 
 export default function ProductItem() {
     const params = useParams();
@@ -38,7 +39,7 @@ export default function ProductItem() {
             <Header />
             <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
                 <div className="bg-white shadow-xl rounded-2xl p-6 max-w-md w-full">
-                    <img
+                    <Image
                         src={product.thumbnail}
                         alt={product.title}
                         className="rounded-xl mb-4 w-full h-64 object-cover"

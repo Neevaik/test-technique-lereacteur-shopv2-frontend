@@ -18,7 +18,7 @@ export default function HomePage() {
             Se connecter
           </Link>
           <Link href="/users/signup" className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition">
-            S'inscrire
+            S inscrire
           </Link>
           <Link href="/products" className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-xl shadow hover:bg-purple-700 transition">
             Voir les produits
