@@ -26,9 +26,9 @@ async function loginAction(
       token: res.data.token,
       id: res.data._id,
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
     return {
-      message: err.response?.data?.message || err.message,
+      message: (err as any).response?.data?.message || (err as any).message,
       success: false,
     };
   }

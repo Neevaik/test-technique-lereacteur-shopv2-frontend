@@ -19,9 +19,9 @@ async function signupAction(prevState: string | null, formData: FormData) {
     });
     if (res.status !== 201) throw new Error("Erreur lors de l inscription");
     return "✅ Inscription réussie";
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error signing up:", error);
-    return error.response?.data?.message || "Erreur lors de l inscription ❌";
+    return (error as any).response?.data?.message || "Erreur lors de l inscription ❌";
   }
 }
 

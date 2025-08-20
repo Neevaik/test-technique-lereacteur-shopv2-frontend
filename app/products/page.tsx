@@ -27,7 +27,7 @@ export default function ProductsPage() {
             try {
                 const res = await axios.get("http://localhost:4000/products");
                 setProducts(res.data);
-            } catch (err: any) {
+            } catch (err: unknown) {
                 setError("Impossible de charger les produits ❌");
                 console.error(err);
             } finally {
@@ -62,7 +62,7 @@ export default function ProductsPage() {
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    
+
     return (
         <>
             <Header />
