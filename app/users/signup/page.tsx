@@ -23,7 +23,7 @@ async function signupAction(prevState: string | null, formData: FormData) {
   const password = formData.get("password");
 
   try {
-    const res = await axios.post("http://localhost:4000/user/signup", {
+    const res = await axios.post("https://test-technique-lereacteur-shopv2-ba.vercel.app/user/signup", {
       username,
       email,
       password,
